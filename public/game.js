@@ -4,11 +4,14 @@
 const socket = io.connect('http://localhost:3000');
 
 //Elements
-var button = document.getElementById('playBtn');
+var username_button = document.getElementById('username_btn')
+var username_input = document.getElementById('username_input')
+var playbutton = document.getElementById('playBtn');
 var kierrosDIV = document.getElementById('kierrosDIV')
 var pisteetDIV = document.getElementById('pisteetDIV')
 var nextWinDIV = document.getElementById('nextWin')
 var timerDIV = document.getElementById('timer')
+var scoreboardDIV = document.getElementById('scoreboard')
 
 //Variables
 var kierrosNro = 0  //DEV PURPOSES: Variable for displaying rounds that have been played
@@ -19,16 +22,26 @@ var kierroksiaVoittoon = 10  //Variable for displaying rounds until next win
 pisteetDIV.innerHTML = '<p>Pisteesi:' + pelaajanPisteet + '</p>';
 nextWinDIV.innerHTML = '<p>Kierrokset seuraavaan voittoon: ' + kierroksiaVoittoon + '</p>';
 
-//EMIT EVENTS
+/*EMIT EVENTS*/
 
-button.addEventListener('click', function(){
+//Event listener for username submit button, submits username to server
+username_button.addEventListener('click', function(){
+  var username = username_input.value
+  socket.emit('username', {
+    username: username
+  });
+});
+
+
+//Event listener for play -button
+playbutton.addEventListener('click', function(){
   socket.emit('userClick',{
     round: 1
   });
 });
 
 
-//LISTEN FOR EVENTS
+/*LISTEN FOR EVENTS*/
 
 //Display round
 socket.on('userClick', function(gameRound){
@@ -81,4 +94,9 @@ socket.on('winningRound', function(pointsGranted){
 socket.on('updateTimer', function(data){
   timerDIV.innerHTML = '<p>' + data.minutes + ' minuuttia ' + data.seconds
   + ' sekuntia kierroksen loppuun.</p>'
+});
+
+//Display updated scoreboard to clients
+socket.on('update_scoreboard', function(sorted_scoreboard){
+  scoreboardDIV.innerHTML = '<h4>Scoreboard:</h4>' + sorted_scoreboard;
 });

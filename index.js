@@ -4,42 +4,53 @@ const express = require('express');
 const port = 3000
 const socket = require('socket.io')
 
-//Application setup
+/*APPLICATION SETUP*/
 var app = express();
 var server = app.listen(port, function(){
   console.log('Listening port ' + port);
 });
 
-//Values stored on server
+/*VALUES STORED ON SERVER*/
 var gameRound = 0  //Stores rounds that have been played
-var clientScoreboard = {};  //Stores players' points
+var clientPoints = {};  //Stores players' points related to client socket ids
+var clientUsernames = {};  //Stores usernames related to client socket ids
 
-//Socket setup
+/*SOCKET SETUP*/
 var io = socket(server);
 
 io.on('connection', function(socket){
   console.log('Connected socket ' + socket.id);
-  //Add client to scoreboard with default score value 20 for score tracking purposes
+  //Add client to clientPoints with default score value 20 for score tracking purposes
   var socketID = socket.id
-  clientScoreboard[socketID] = 20;
+  clientPoints[socketID] = 20;
   //Display for developer purposes
-  console.log(clientScoreboard);
+  console.log(clientPoints);
 
-  //Listening user clicks
+  //Listening for client submitting username
+  socket.on('username', function(data) {
+    var username = data.username
+    clientUsernames[username] = socketID
+  });
+
+  //Listening user clicks on play button
   socket.on('userClick', function(data){
-    if (clientScoreboard[socketID] >= 1){
+    if (clientPoints[socketID] >= 1){
       //Update game round and send it to all clients
       gameRound += data.round
       io.sockets.emit('userClick', gameRound);
 
-      //Update and send current points to player
+      //Update and send current points to client
       var pointsGranted = pointCounter(gameRound);
       if (pointsGranted != 0){
         socket.emit('winningRound', pointsGranted);
       }
-      clientScoreboard[socketID] += pointsGranted
-      clientScoreboard[socketID] -= 1 //Minus the cost of playing a round
-      socket.emit('addPoints', clientScoreboard[socketID]);
+      clientPoints[socketID] += pointsGranted
+      clientPoints[socketID] -= 1 //Minus the cost of playing a round
+      socket.emit('addPoints', clientPoints[socketID]);
+
+      //Update and send scoreboard to clients
+      var sorted_scoreboard = scoreboard_sort(clientUsernames, clientPoints)
+      io.sockets.emit('update_scoreboard', sorted_scoreboard);
 
       //Update rounds until next winning round and send value to all clients
       var nextWinAt = nextWin(gameRound);
@@ -51,8 +62,8 @@ io.on('connection', function(socket){
 
   //Listen for stats reset
   socket.on('resetStats', function(data){
-    clientScoreboard[socketID] = data.points
-    socket.emit('addPoints', clientScoreboard[socketID]);
+    clientPoints[socketID] = data.points
+    socket.emit('addPoints', clientPoints[socketID]);
   });
 
 });
@@ -60,9 +71,10 @@ io.on('connection', function(socket){
 //Serving static files
 app.use(express.static('public'));
 
-//Functions
+/*FUNCTIONS*/
 
-function pointCounter(round){  //Determines reward for player by comparing to rounds played
+//Determines reward for player by comparing to rounds played
+function pointCounter(round){
   if (round % 500 == 0){
     return 250;
   } else if (round % 100 == 0) {
@@ -74,15 +86,15 @@ function pointCounter(round){  //Determines reward for player by comparing to ro
   }
 };
 
-
-function nextWin(round){  //Determines how many rounds until next winning round
+//Determines how many rounds until next winning round
+function nextWin(round){
   var tillNext = 10 - (round % 10)
   return tillNext;
 }
 
 
 //Round timer
-var round_lenght = 0.2;  //Round length in minutes
+var round_lenght = 2;  //Round length in minutes
 
 function start_clock(){
 
@@ -118,4 +130,47 @@ start_clock(); //Start the clock
 function restart_round(){
   io.sockets.emit('newRound');  //Inform clients about the end of the round
   start_clock();  //Restart the clock
+}
+//End of round timer
+
+//Function for sorting client scores to scoreboard in descending order
+function scoreboard_sort(socket_id, id_points){
+
+  //Variables
+  var output='';
+
+  //Create array for storing usernames and their points
+  var scoreboard = new Array();
+
+  //SCOREBOARD SORTER START
+
+  /*Loop for getting correct username and point values for socket id
+  and storing them into an array for sorting and display purposes*/
+  for (var i = 0; i < Object.keys(socket_id).length; i++){
+
+    var username = Object.keys(socket_id)[i]
+
+    var socketID = socket_id[Object.keys(socket_id)[i]]
+    var client_points = id_points[socketID]
+
+    var object = new Object();  //Create object for storing username and point pairs
+    //Add username and it's points to object
+    object['username'] = username;
+    object['points'] = client_points;
+
+    scoreboard[i] = object;  //Append object to array
+  }
+
+  //Sort created array by the points
+  scoreboard.sort(function(a,b){
+    return b.points - a.points;  //Sorting in descending order
+  });
+
+  //Print scores to screen
+  for (var i = 0; i < scoreboard.length; i++){
+    output = output + '<p>' + (i+1) + '. '
+    + scoreboard[i].username + ' ' + scoreboard[i].points + '</p>';
+  }
+
+  return output;
 }
