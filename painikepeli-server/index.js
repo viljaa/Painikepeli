@@ -1,11 +1,12 @@
 //Back-End JS
 
 const express = require('express');
-const port = 3000
-const socket = require('socket.io')
+const port = 4000
+const socket = require('socket.io');
 
 /*APPLICATION SETUP*/
 var app = express();
+
 var server = app.listen(port, function(){
   console.log('Listening port ' + port);
 });
@@ -14,6 +15,8 @@ var server = app.listen(port, function(){
 var gameRound = 0  //Stores rounds that have been played
 var clientPoints = {};  //Stores players' points related to client socket ids
 var clientUsernames = {};  //Stores usernames related to client socket ids
+/*Configuration variables*/
+var round_lenght = 0.2;  //Sets round length in minutes
 
 /*SOCKET SETUP*/
 var io = socket(server);
@@ -30,6 +33,7 @@ io.on('connection', function(socket){
   socket.on('username', function(data) {
     var username = data.username
     clientUsernames[username] = socketID
+    console.log(clientUsernames); //Dev purposes
   });
 
   //Listening user clicks on play button
@@ -66,10 +70,18 @@ io.on('connection', function(socket){
     socket.emit('addPoints', clientPoints[socketID]);
   });
 
+  //Listen for disconnecting clients and remove them from clientPoints object
+  socket.on('disconnect', function(){
+    delete clientPoints[socketID];
+    console.log('Client ' + socketID + ' has disconnected.');
+  });
+
 });
 
+start_clock(); //Starts the in-game round timer
+
 //Serving static files
-app.use(express.static('public'));
+/*app.use(express.static('public'));*/  //Dev purposes, not used on the final page
 
 /*FUNCTIONS*/
 
@@ -94,7 +106,6 @@ function nextWin(round){
 
 
 //Round timer
-var round_lenght = 2;  //Round length in minutes
 
 function start_clock(){
 
@@ -124,8 +135,6 @@ function time_left(roundend){
 
   return {'total_time':total_time, 'minutes': minutes, 'seconds': seconds}; //Function returns time left formatted into minutes and seconds
 }
-
-start_clock(); //Start the clock
 
 function restart_round(){
   io.sockets.emit('newRound');  //Inform clients about the end of the round
@@ -166,7 +175,7 @@ function scoreboard_sort(socket_id, id_points){
     return b.points - a.points;  //Sorting in descending order
   });
 
-  //Print scores to screen
+  //Create output for displaying scoreboard on clients
   for (var i = 0; i < scoreboard.length; i++){
     output = output + '<p>' + (i+1) + '. '
     + scoreboard[i].username + ' ' + scoreboard[i].points + '</p>';

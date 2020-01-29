@@ -1,7 +1,7 @@
 //Front-End Application JS
 
 //Connect client to server
-const socket = io.connect('http://localhost:3000');
+const socket = io.connect('http://localhost:4000');
 
 //Elements
 var username_button = document.getElementById('username_btn')
@@ -80,6 +80,7 @@ socket.on('noPoints', function(){
 socket.on('newRound', function(){
   kierroksiaVoittoon = 10;
   nextWinDIV.innerHTML = '<p>Kierrokset seuraavaan voittoon: ' + kierroksiaVoittoon + '</p>';
+  scoreboardDIV.innerHTML = '<h4>Scoreboard:</h4>';
   socket.emit('resetStats', {
     points: 20
   });
