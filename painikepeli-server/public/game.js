@@ -64,7 +64,7 @@ socket.on('nextWin', function(nextWinAt){
 });
 
 
-//"No points left" - event, ask player if they want to restart
+//"No points" - event, ask player if they want to restart
 socket.on('noPoints', function(){
   //VAATII UUDEN KÄYTTÖLIITTYMÄN, KÄYTETTÄVÄ JOTAIN MUUTA KUIN CONFIRM DIALOGIA
   if(confirm("Pisteesi ovat loppu! Haluatko aloittaa alusta?")){
