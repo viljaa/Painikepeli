@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P|Roboto+Mono&display=swap');  /*Fonts*/
+
+/*Containers*/
+
+#rules{
+    /*background-color: brown;*/
+    min-height: 800px;
+    min-width: 400px;
+    float: left;
+}
+
+#app_container{
+    /*background-color: cornflowerblue;*/
+    min-height: 800px;
+    min-width: 1500px;
+}
+
+#game_container{
+    /*background-color: darkgoldenrod;*/
+    min-height:790px;
+    min-width: 970px;
+    margin: 5px 0px 5px 5px;
+    float: left;
+}
+
+#scoreboard_container{
+    /*background-color: deeppink;*/
+    min-height: 780px;
+    min-width: 500px;
+    margin: 5px 5px 5px 0px;
+    float: left;
+}
+
+#footer{
+    background-color: rgb(180, 180, 180);
+    opacity: 0.8;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 27px;
+    text-align: center;
+  }
+
+/*Text*/
+
+#footer_text{
+    font-family: 'Press Start 2P', cursive;
+    font-weight: bold;
+    font-size: 9px;
+}

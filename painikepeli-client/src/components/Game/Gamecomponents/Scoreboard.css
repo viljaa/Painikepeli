@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P|Roboto+Mono&display=swap');  /*Fonts*/
+
+/*Elements*/
+#scoreboard_content{
+    margin-top: 240px;
+}
+
+/*Text*/
+#scoreboard_title{
+    font-family: 'Press Start 2P', cursive;
+    margin: 10px 0px 0px 0px;
+}
+
+#score{
+    font-family: 'Press Start 2P', cursive;
+}
