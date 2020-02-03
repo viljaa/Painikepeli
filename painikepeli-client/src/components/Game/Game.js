@@ -9,11 +9,23 @@ import Scoreboard from './Gamecomponents/Scoreboard.js';
 
 import './game.css';
 
-import{send_username} from './api';
-
   const Game = ({location}) => {
 
     const endpoint = 'localhost:4000'
+
+    const socket = io.connect(endpoint);
+
+    /*EMIT EVENTS*/
+    function send_username(username){
+        socket.emit('username', {
+            username: username
+        });
+    }
+
+    /*LISTEN EVENTS*/
+    socket.on('userClick', function(gameRound){
+        console.log(gameRound);
+    });
 
     useEffect(() => {
       const data = queryString.parse(location.search);
@@ -30,8 +42,8 @@ import{send_username} from './api';
         </div>
         <div id="app_container">
           <div id="game_container">
-            <PointDisplay />
-            <Playbutton />
+            <PointDisplay socket={socket} />
+            <Playbutton socket={socket}/>
           </div>
           <div id="scoreboard_container">
             <Scoreboard />

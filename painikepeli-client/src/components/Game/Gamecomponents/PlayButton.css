@@ -20,6 +20,10 @@
     transition: 0.2s;
 }
 
+#play_button:focus{
+    outline: 0;
+}
+
 /*Animations*/
 
 #play_button:hover{

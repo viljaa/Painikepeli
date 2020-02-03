@@ -3,6 +3,10 @@ import io from 'socket.io-client';
 const endpoint = 'localhost:4000';
 const socket = io.connect(endpoint);
 
+function socket(){
+    return socket;
+}
+
 /*EMIT EVENTS*/
 function send_username(username){
     socket.emit('username', {

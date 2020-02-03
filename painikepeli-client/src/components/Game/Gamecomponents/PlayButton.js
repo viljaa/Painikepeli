@@ -1,9 +1,15 @@
 import React from "react";
-import {user_click} from '../api'
 
 import './PlayButton.css';
 
-const PlayButton = () =>{
+const PlayButton = ({socket}) =>{
+
+    function user_click(){
+        socket.emit('userClick',{
+            round: 1
+        });
+    }
+
     return (
         <div id="button_container">
             <button id="play_button" onClick={user_click}>PLAY</button>
