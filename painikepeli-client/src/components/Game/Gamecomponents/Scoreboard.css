@@ -3,6 +3,8 @@
 /*Elements*/
 #scoreboard_content{
     margin-top: 240px;
+    font-family: 'Press Start 2P', cursive;
+    transition: transform 0.6s;
 }
 
 /*Text*/
@@ -13,4 +15,9 @@
 
 #score{
     font-family: 'Press Start 2P', cursive;
+}
+
+/*Animations*/
+#scoreboard_content:hover{
+    transform: scale(1.2);
 }

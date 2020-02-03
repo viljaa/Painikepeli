@@ -1,22 +1,29 @@
-import React from "react";
+import React, {useState} from "react";
+import renderHTML from 'react-render-html';
 
 import './Scoreboard.css'
 
-const Scoreboard = () =>{
+const Scoreboard = ({socket}) =>{
+
+    const [scores, setScores] = useState('');
+
+    /*Listen for emits*/
+
+    socket.on('update_scoreboard', function(scoreboard){
+        setScores(scoreboard);
+    });
+
+    socket.on('newRound', function(){
+        setScores('');
+    });
+
     return (
         <div id="scoreboard_content">
             <h2 id="scoreboard_title">Scoreboard:</h2>
-            <p id="score">1. Jonne Eerik: 20</p>
-            <p id="score">2. Jonne Eerik: 20</p>
-            <p id="score">3. Jonne Eerik: 20</p>
-            <p id="score">4. Jonne Eerik: 20</p>
-            <p id="score">5. Jonne Eerik: 20</p>
-            <p id="score">6. Jonne Eerik: 20</p>
-            <p id="score">7. Jonne Eerik: 20</p>
-            <p id="score">8. Jonne Eerik: 20</p>
-            <p id="score">9. Jonne Eerik: 20</p>
+            {renderHTML(scores)}
         </div>
     )
 }
+
 
 export default Scoreboard;

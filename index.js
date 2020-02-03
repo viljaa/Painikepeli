@@ -27,6 +27,10 @@ var io = socket(server);
 io.on('connection', function(socket){
   console.log('Connected socket ' + socket.id);
 
+  //Send current scoreboard to socket on connection
+  var sorted_scoreboard = scoreboard_sort(client_list);
+  socket.emit('update_scoreboard', sorted_scoreboard);
+
   var client = {};  //Stores socketID, username and points of specific client
 
   //Listening for client submitting username
@@ -168,6 +172,7 @@ function time_left(roundend){
 
 function restart_round(){
   io.sockets.emit('newRound');  //Inform clients about the end of the round
+
   start_clock();  //Restart the clock
 }
 //End of round timer
@@ -178,6 +183,7 @@ function scoreboard_sort(list){
 
   //Variables
   var output='';
+  var position = 0;
 
   //Sort array by the points
   list.sort(function(a,b){
@@ -186,7 +192,8 @@ function scoreboard_sort(list){
 
   //Create output for displaying scoreboard on clients
   for (var i in list){
-    output = output + '<p>' + (i+1) + '. '
+    position +=1;
+    output = output + '<p>' + (position) + '. '
     + list[i].username + ' ' + list[i].points + '</p>';
   }
 

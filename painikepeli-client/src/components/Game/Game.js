@@ -46,7 +46,7 @@ import './game.css';
             <Playbutton socket={socket}/>
           </div>
           <div id="scoreboard_container">
-            <Scoreboard />
+            <Scoreboard socket={socket}/>
           </div>
         </div>
         <div id="footer">
