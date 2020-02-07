@@ -15,6 +15,7 @@
     text-align: center;
     height: 45px;
     width: 400px;
+    transition: 0.2s;
     
     
 }
@@ -27,6 +28,8 @@
     height: 51px;
     border-top-right-radius: 13px;
     border-bottom-right-radius: 13px;
+    border-color: slategray;
+    border-style: solid;
     transition: 0.2s;
     opacity: 0.85;
     vertical-align: top;
@@ -37,6 +40,7 @@
     font-family: 'Press Start 2P', cursive;
     font-size: 50px;
     transition: transform 0.6s;
+    animation: lobby_breathing 2s ease-out infinite normal;
 }
 
 /*Animations*/
@@ -47,4 +51,20 @@
 
 .h1_titles:hover{
     transform: scale(1.2);
+}
+
+#username_input:hover{
+    box-shadow: 0px 0px 32px -12px rgba(0,0,0,0.75);
+}
+
+@keyframes lobby_breathing{
+    0%{
+        transform: scale(0.975);
+    }
+    40%{
+        transform: scale(1);
+    }
+    100%{
+        transform: scale(0.975);
+    }
 }

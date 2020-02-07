@@ -19,7 +19,7 @@ var gameRound = 0  //Stores rounds that have been played
 let client_list = [];  //Stores all clients' data in the form of client{} objects
 
 /*Configuration variables*/
-var round_lenght = 1;  //Sets round length in minutes
+var round_lenght = 5;  //Sets round length in minutes
 
 /*SOCKET SETUP*/
 var io = socket(server);
@@ -62,11 +62,15 @@ io.on('connection', function(socket){
       //Update and send current points to client
       var pointsGranted = pointCounter(gameRound);
       if (pointsGranted != 0){
-        socket.emit('winningRound', pointsGranted);
+        client.points += pointsGranted
+        client.points -= 1 //Minus the cost of playing a round
+        socket.emit('winningRound', pointsGranted, client.points);
       }
+      else{
       client.points += pointsGranted
       client.points -= 1 //Minus the cost of playing a round
       socket.emit('addPoints', client.points);
+      }
 
       //Update new points of client{} to client_list[]
       var socketID = socket.id

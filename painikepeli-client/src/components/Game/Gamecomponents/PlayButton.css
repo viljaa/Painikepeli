@@ -4,7 +4,7 @@
 
 #button_container{
     text-align: center;
-    margin: 50px 0px 0px 50px;
+    margin: 50px 20px 0px 0px;
 }
 
 #play_button{
@@ -30,4 +30,8 @@
     background-color: rgb(54, 54, 54);
     border-style: solid;
     border-color: rgb(121, 121, 121);
+}
+#play_button:active{
+    transition: transform 0.3s;
+    transform: scale(1.05);
 }

@@ -4,20 +4,20 @@ import './PointDisplay.css';
 
 const PointDisplay = ({socket}) =>{
 
-    const[points, setPoints] = useState(20);
     const[seconds, setSeconds] = useState(0);
     const[minutes, setMinutes] = useState(0);
     const[nextWin, setNextWin] = useState(10);
-    const[wonPoints, setWonPoints] = useState(0);
+    const[output, setOutput] = useState('Sinulla on 20 pistettä!');
+
 
     /*Listen for emits*/
 
     socket.on('addPoints', function(clientPoints){
-        setPoints(clientPoints);
+        setOutput('Sinulla on ' + clientPoints + ' pistettä!');
     });
 
-    socket.on('winningRound', function(pointsGranted){
-        //TODO
+    socket.on('winningRound', function(pointsGranted, clientPoints){
+        setOutput('Voitit ' + pointsGranted + ' pistettä! Sinulla on ' + clientPoints + ' pistettä!');
     });
 
     socket.on('updateTimer', function(time){
@@ -44,7 +44,7 @@ const PointDisplay = ({socket}) =>{
         <div id="points_container">
             <div>
                 <h1 id="title">PAINIKEPELI</h1>
-                <div><h1 className="points">Sinulla on {points} pistettä!</h1></div>
+                <div><h1 className="points">{output}</h1></div>
                 <h2 id="nextWin">{nextWin} kierrosta seuraavaan voittoon.</h2>
                 <h2 id="clock">{minutes}:{seconds}</h2>
             </div>

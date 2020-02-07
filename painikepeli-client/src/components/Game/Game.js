@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import queryString from 'query-string';
 import io from 'socket.io-client';
 
@@ -6,6 +6,7 @@ import Rules from './Gamecomponents/Rules.js';
 import PointDisplay from './Gamecomponents/PointDisplay.js';
 import Playbutton from './Gamecomponents/PlayButton.js';
 import Scoreboard from './Gamecomponents/Scoreboard.js';
+import AlertDialog from './Gamecomponents/AlertDialog.js'
 
 import './game.css';
 
@@ -32,11 +33,11 @@ import './game.css';
       const username = data.username;
       console.log('Nimimerkki:' + data.username);
 
-      send_username(username)
+      send_username(username);
     }, [endpoint, location.search]);
 
     return (
-      <div>
+      <div id = "ui_container">
         <div id="rules">
           <Rules />
         </div>
@@ -52,6 +53,7 @@ import './game.css';
         <div id="footer">
           <p id="footer_text">Made by Ville Jaatinen 2020</p>
         </div>
+          <AlertDialog socket ={socket}/>
       </div>
     )
   }
