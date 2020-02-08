@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import renderHTML from 'react-render-html';
+import {Link} from 'react-router-dom';
 
 import './Scoreboard.css'
 
@@ -17,10 +18,20 @@ const Scoreboard = ({socket}) =>{
         setScores('');
     });
 
+    /*Method for disconnecting socket*/
+    const disconnect = () =>{
+        socket.disconnect();
+    }
+
     return (
-        <div id="scoreboard_content">
-            <h2 id="scoreboard_title">Scoreboard:</h2>
-            {renderHTML(scores)}
+        <div>
+            <Link to={`/End`}>
+                <button id="endgame_btn" onClick={disconnect}>LOPETA</button>
+            </Link>
+            <div id="scoreboard_content">
+                <h2 id="scoreboard_title">Scoreboard:</h2>
+                {renderHTML(scores)}
+            </div>
         </div>
     )
 }

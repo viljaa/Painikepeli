@@ -28,6 +28,9 @@
 #toggle_rules:focus{
     outline: 0;
 }
+#toggle_rules::-moz-focus-inner{
+    border:0;
+}
 
 /*Text*/
 
@@ -36,7 +39,7 @@
     font-size: 18px;
 }
 
-#rules_p{
+#rules_pre{
     font-family: 'Roboto Mono', monospace;
     font-weight: bold;
     font-size: 15px;

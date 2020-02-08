@@ -1,18 +1,23 @@
 @import url('https://fonts.googleapis.com/css?family=Press+Start+2P|Roboto+Mono&display=swap');  /*Fonts*/
 
 /*Containers*/
+#ui_container{
+    height:900px;
+    width:1900px;
+    margin:auto;
+}
 
 #rules{
     /*background-color: brown;*/
     min-height: 800px;
-    width: 400px;
+    width: 420px;
     float: left;
 }
 
 #app_container{
     /*background-color: cornflowerblue;*/
     min-height: 800px;
-    min-width: 1500px;
+    width: 1900px;
 }
 
 #game_container{
@@ -27,7 +32,7 @@
     /*background-color: deeppink;*/
     min-height: 780px;
     min-width: 400px;
-    margin: 5px 5px 5px 0px;
+    margin: 5px 0px 0px 0px;
     float: left;
 }
 
