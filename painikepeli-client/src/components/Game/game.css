@@ -8,20 +8,17 @@
 }
 
 #rules{
-    /*background-color: brown;*/
     min-height: 800px;
     width: 420px;
     float: left;
 }
 
 #app_container{
-    /*background-color: cornflowerblue;*/
     min-height: 800px;
     width: 1900px;
 }
 
 #game_container{
-    /*background-color: darkgoldenrod;*/
     min-height:790px;
     min-width: 1030px;
     margin: 5px 0px 5px 5px;
@@ -29,7 +26,6 @@
 }
 
 #scoreboard_container{
-    /*background-color: deeppink;*/
     min-height: 780px;
     min-width: 400px;
     margin: 5px 0px 0px 0px;

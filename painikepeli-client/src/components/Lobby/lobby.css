@@ -3,7 +3,7 @@
 /*Elements*/
 
 #lobby_container{
-    height: 140px;
+    height: 190px;
     width: 600px;
     text-align: center;
     margin: 350px auto auto auto;
@@ -37,6 +37,9 @@
 #username_btn::-moz-focus-inner{
     border:0;
 }
+#username_btn:focus{
+    outline: 0;
+}
 
 /*Text*/
 .h1_titles{
@@ -44,6 +47,13 @@
     font-size: 50px;
     transition: transform 0.6s;
     animation: lobby_breathing 2s ease-out infinite normal;
+}
+
+.input_error{
+    font-family: 'Roboto Mono', monospace;
+    font-weight: bold;
+    color: red;
+    font-size: 13px;
 }
 
 /*Animations*/

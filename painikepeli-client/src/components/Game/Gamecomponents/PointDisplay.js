@@ -36,10 +36,6 @@ const PointDisplay = ({socket}) =>{
         });
     });
 
-    socket.on('noPoints', function(){
-        //TODO
-    });
-
     return (
         <div id="points_container">
             <div>
