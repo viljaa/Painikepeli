@@ -12,7 +12,7 @@ import './game.css';
 
   const Game = ({location}) => {
 
-    const endpoint = 'localhost:4000'
+    const endpoint = 'https://vj-painikepeli.herokuapp.com/'
 
     const socket = io.connect(endpoint);
 
