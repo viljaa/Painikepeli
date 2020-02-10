@@ -7,7 +7,7 @@ const socket = require('socket.io');
 /*APPLICATION SETUP*/
 var app = express();
 
-app.use(express.static(path.join(__dirname, 'painikepeli-client/build')));
+app.use(express.static(path.join(__dirname, 'build')));
 
 var server = app.listen(port, function(){
   console.log('Listening port ' + port);
