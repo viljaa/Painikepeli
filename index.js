@@ -3,14 +3,16 @@
 const express = require('express');
 const port = process.env.PORT || 4000
 const socket = require('socket.io');
-const path = require('path');
+const http = require('http');
 
 /*APPLICATION SETUP*/
 var app = express();
 
-app.use(express.static(path.join(__dirname, 'build')));
+const server = http.createServer(app);
 
-var server = app.listen(port, function(){
+app.use(express.static('build'));
+
+server.listen(port, function(){
   console.log('Listening port ' + port);
 });
 
