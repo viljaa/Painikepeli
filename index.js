@@ -4,13 +4,14 @@ const express = require('express');
 const port = process.env.PORT || 4000
 const socket = require('socket.io');
 const http = require('http');
+const path = require('path');
 
 /*APPLICATION SETUP*/
 const app = express();
 
 const server = http.createServer(app);
 
-app.use(express.static('build'));
+app.use(express.static(path.join(__dirname, '/painikepeli-client/build')));
 
 server.listen(port, function(){
   console.log('Listening port ' + port);
