@@ -6,7 +6,7 @@ const socket = require('socket.io');
 const http = require('http');
 
 /*APPLICATION SETUP*/
-var app = express();
+const app = express();
 
 const server = http.createServer(app);
 
@@ -16,31 +16,36 @@ server.listen(port, function(){
   console.log('Listening port ' + port);
 });
 
+// Server-side routing
+app.get('/*',(req,res)=>{
+  res.sendFile(__dirname + '/client/build/index.html');
+})
+
 /*VALUES STORED ON SERVER*/
-var gameRound = 0  //Stores rounds that have been played
+let gameRound = 0  //Stores rounds that have been played
 let client_list = [];  //Stores all clients' data in the form of client{} objects
 
 /*CONFIGURATION VARIABLES*/
-var round_lenght = 3;  // Sets round length in minutes
+const round_lenght = 3;  // Sets round length in minutes
 
 /*SOCKET SETUP*/
-var io = socket(server);
+const io = socket(server);
 
 io.on('connection', function(socket){
   console.log('Connected socket ' + socket.id);
 
   // Send current scoreboard to socket on connection
-  var sorted_scoreboard = scoreboard_sort(client_list);
+  let sorted_scoreboard = scoreboard_sort(client_list);
   socket.emit('update_scoreboard', sorted_scoreboard);
 
-  var client = {};  // Stores socketID, username and points of specific client
+  let client = {};  // Stores socketID, username and points of specific client
 
   // Listening for client submitting username
   socket.on('username', function(data) {
     // Declare socketID, username and points related to the connected client
-    var socketID = socket.id;
-    var username = data.username;
-    var points = 20;
+    let socketID = socket.id;
+    let username = data.username;
+    let points = 20;
 
     // Add the information into the client{} object dedicated to the socket
     client = {
@@ -63,7 +68,7 @@ io.on('connection', function(socket){
       gameRound += data.round
 
       // Update and send current points to client
-      var pointsGranted = pointCounter(gameRound);
+      let pointsGranted = pointCounter(gameRound);
       if (pointsGranted != 0){
         client.points += pointsGranted
         client.points -= 1 // Minus the cost of playing a round
@@ -76,16 +81,16 @@ io.on('connection', function(socket){
       }
 
       // Update new points of client{} to client_list[]
-      var socketID = socket.id
-      var new_points = client.points
+      let socketID = socket.id
+      let new_points = client.points
       updatePoints(socketID, new_points);
 
       // Update and send scoreboard to clients
-      var sorted_scoreboard = scoreboard_sort(client_list);
+      let sorted_scoreboard = scoreboard_sort(client_list);
       io.sockets.emit('update_scoreboard', sorted_scoreboard);
 
       // Update rounds until next winning round and send value to all clients
-      var nextWinAt = nextWin(gameRound);
+      let nextWinAt = nextWin(gameRound);
       io.sockets.emit('nextWin', nextWinAt);
     } 
     // If client doesn't have points
@@ -104,7 +109,7 @@ io.on('connection', function(socket){
   socket.on('disconnect', function(){
     client_list.splice(client_list.findIndex((obj => obj.id == socket.id)),1);
 
-    var sorted_scoreboard = scoreboard_sort(client_list);  // Update scoreboard
+    let sorted_scoreboard = scoreboard_sort(client_list);  // Update scoreboard
     io.sockets.emit('update_scoreboard', sorted_scoreboard);
 
     console.log(JSON.stringify(client_list));
@@ -133,13 +138,13 @@ function pointCounter(round){
 
 // Determines how many rounds until next winning round
 function nextWin(round){
-  var tillNext = 10 - (round % 10)
+  let tillNext = 10 - (round % 10)
   return tillNext;
 }
 
 // Updates points to client_list[]
 function updatePoints(id,newpoints){
-  for (var i in client_list){
+  for (let i in client_list){
       if(client_list[i].id == id){
           client_list[i].points = newpoints;
           break;
@@ -151,11 +156,11 @@ function updatePoints(id,newpoints){
 
 function start_clock(){
 
-  var round_start = Date.parse(new Date());  // The time when the round starts in milliseconds
-  var round_end = new Date(round_start + round_lenght*60*1000);  // The time when the round ends in milliseconds
+  let round_start = Date.parse(new Date());  // The time when the round starts in milliseconds
+  let round_end = new Date(round_start + round_lenght*60*1000);  // The time when the round ends in milliseconds
 
   function update_time(){
-    var time = time_left(round_end);
+    let time = time_left(round_end);
 
     io.sockets.emit('updateTimer', {
       minutes: time.minutes,
@@ -167,13 +172,13 @@ function start_clock(){
       restart_round();}
   }
   update_time();
-  var timeinterval = setInterval(update_time, 1000);  // Time interval for updating the clock for display
+  let timeinterval = setInterval(update_time, 1000);  // Time interval for updating the clock for display
 }
 
 function time_left(roundend){
-  var total_time = Date.parse(roundend) - Date.parse(new Date());  // Total time left = (RoundEndTime - CurrentTime)
-  var seconds = Math.floor( (total_time/1000) % 60 );  // Remainder of seconds
-  var minutes = Math.floor( (total_time/1000/60) % 60 );  // Remainder of minutes
+  let total_time = Date.parse(roundend) - Date.parse(new Date());  // Total time left = (RoundEndTime - CurrentTime)
+  let seconds = Math.floor( (total_time/1000) % 60 );  // Remainder of seconds
+  let minutes = Math.floor( (total_time/1000/60) % 60 );  // Remainder of minutes
 
   // Function returns time left formatted into minutes and seconds
   return {'total_time':total_time, 'minutes': minutes, 'seconds': seconds};
@@ -189,21 +194,10 @@ function restart_round(){
 // Function for sorting client scores to scoreboard in descending order
 function scoreboard_sort(list){
 
-  // Variables
-  var output='';
-  var position = 0;
-
   // Sort array by the points
-  list.sort(function(a,b){
+  let output = list.sort(function(a,b){
     return b.points - a.points;  // Sorting in descending order
   });
-
-  // Create output for displaying scoreboard on clients
-  for (var i in list){
-    position +=1;
-    output = output + '<p>' + (position) + '. '
-    + list[i].username + ' ' + list[i].points + '</p>';
-  }
 
   return output;
 }
