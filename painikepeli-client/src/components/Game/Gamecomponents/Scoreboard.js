@@ -5,7 +5,7 @@ import './Scoreboard.css'
 
 const Scoreboard = ({socket}) =>{
 
-    const [scores, setScores] = useState([]);
+    const [scores, setScores] = useState(['']);
 
     /*Listen for emits*/
 
