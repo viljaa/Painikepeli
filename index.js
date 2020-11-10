@@ -18,7 +18,7 @@ server.listen(port, function(){
 
 // Server-side routing
 app.get('/*',(req,res)=>{
-  res.sendFile(__dirname + '/client/build/index.html');
+  res.sendFile(__dirname + '/painikepeli-client/build/index.html');
 })
 
 /*VALUES STORED ON SERVER*/
